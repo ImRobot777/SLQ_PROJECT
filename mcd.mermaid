@@ -1,0 +1,58 @@
+%% =====================================================================
+%%  MCD - Modèle Conceptuel de Données
+%%  Plateforme « Point relais à domicile »  -  7 entités, 10 associations
+%% ---
+%%  Comment lire ce schéma :
+%%    - Rectangle bleu  = ENTITÉ (deviendra une table)
+%%    - Ovale orange    = ASSOCIATION (le lien, nommé par un verbe)
+%%    - Étiquette sur le trait = CARDINALITÉ, écrite du côté de l'entité.
+%%      Elle décrit ce que fait UNE SEULE occurrence de cette entité :
+%%        0,1 = zéro ou un     |  1,1 = exactement un
+%%        0,n = zéro à plusieurs | 1,n = un à plusieurs
+%% ---
+%%  Le statut d'un colis n'est PAS une entité : c'est une liste figée de
+%%  6 valeurs, donc un simple attribut de type énuméré (col_statut, his_statut).
+%% ---
+%%  Pour visualiser : coller ce fichier sur https://mermaid.live
+%% =====================================================================
+flowchart TB
+    ADRESSE["<b>ADRESSE</b><br/>──────────────<br/><u>adr_id</u><br/>adr_numero<br/>adr_voie<br/>adr_complement<br/>adr_code_postal<br/>adr_ville<br/>adr_pays<br/>adr_latitude<br/>adr_longitude"]
+
+    PARTICULIER["<b>PARTICULIER</b><br/>──────────────<br/><u>par_id</u><br/>par_civilite<br/>par_nom<br/>par_prenom<br/>par_date_naissance<br/>par_email<br/>par_telephone<br/>par_mot_de_passe_hash<br/>par_date_inscription<br/>par_type_logement<br/>par_etage<br/>par_a_ascenseur<br/>par_surface_stockage_m2<br/>par_capacite_max_colis<br/>par_est_securise<br/>par_commentaire_acces<br/>par_disponibilites<br/>par_est_eligible<br/>par_est_actif<br/>par_date_desactivation"]
+
+    TRANSPORTEUR["<b>TRANSPORTEUR</b><br/>──────────────<br/><u>tra_id</u><br/>tra_raison_sociale<br/>tra_siret<br/>tra_email<br/>tra_telephone<br/>tra_contact_nom<br/>tra_date_debut_partenariat<br/>tra_date_fin_partenariat<br/>tra_est_actif"]
+
+    CLIENT["<b>CLIENT</b><br/>──────────────<br/><u>cli_id</u><br/>cli_civilite<br/>cli_nom<br/>cli_prenom<br/>cli_email<br/>cli_telephone"]
+
+    MISSION["<b>MISSION</b><br/>──────────────<br/><u>mis_id</u><br/>mis_date_candidature<br/>mis_date_validation<br/>mis_date_debut<br/>mis_date_fin<br/>mis_statut<br/>mis_capacite_max_colis<br/>mis_commentaire"]
+
+    COLIS["<b>COLIS</b><br/>──────────────<br/><u>col_id</u><br/>col_reference<br/>col_statut<br/>col_poids_kg<br/>col_longueur_cm<br/>col_largeur_cm<br/>col_hauteur_cm<br/>col_valeur_declaree_eur<br/>col_est_fragile<br/>col_code_retrait<br/>col_date_prise_en_charge<br/>col_date_depot_relais<br/>col_date_limite_retrait<br/>col_date_cloture"]
+
+    HISTORIQUE_STATUT["<b>HISTORIQUE_STATUT</b><br/>──────────────<br/><u>his_id</u><br/>his_statut<br/>his_date_changement<br/>his_origine<br/>his_commentaire"]
+
+    A1(["RÉSIDER À"])
+    A2(["AVOIR SON SIÈGE À"])
+    A3(["ÊTRE DOMICILIÉ À"])
+    A4(["ASSURER"])
+    A5(["CONFIER"])
+    A6(["TRANSPORTER"])
+    A7(["ÊTRE DESTINÉ À"])
+    A8(["ÊTRE DÉPOSÉ SOUS"])
+    A9(["ÊTRE TRACÉ PAR"])
+    A10(["SURVENIR SOUS"])
+
+    PARTICULIER ---|"1,1"| A1 ---|"0,n"| ADRESSE
+    TRANSPORTEUR ---|"1,1"| A2 ---|"0,n"| ADRESSE
+    CLIENT ---|"1,1"| A3 ---|"0,n"| ADRESSE
+    PARTICULIER ---|"0,n"| A4 ---|"1,1"| MISSION
+    TRANSPORTEUR ---|"0,n"| A5 ---|"1,1"| MISSION
+    TRANSPORTEUR ---|"0,n"| A6 ---|"1,1"| COLIS
+    CLIENT ---|"0,n"| A7 ---|"1,1"| COLIS
+    MISSION ---|"0,n"| A8 ---|"0,1"| COLIS
+    COLIS ---|"1,n"| A9 ---|"1,1"| HISTORIQUE_STATUT
+    MISSION ---|"0,n"| A10 ---|"0,1"| HISTORIQUE_STATUT
+
+    classDef entite fill:#eef4fb,stroke:#2b6cb0,stroke-width:2px,color:#1a202c,text-align:left
+    classDef assoc fill:#fdf3e3,stroke:#c05621,stroke-width:2px,color:#1a202c
+    class ADRESSE,PARTICULIER,TRANSPORTEUR,CLIENT,MISSION,COLIS,HISTORIQUE_STATUT entite
+    class A1,A2,A3,A4,A5,A6,A7,A8,A9,A10 assoc

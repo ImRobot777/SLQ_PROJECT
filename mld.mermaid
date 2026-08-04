@@ -1,0 +1,132 @@
+%% =====================================================================
+%%  MLD - Modèle Logique de Données  (schéma relationnel)
+%%  Plateforme « Point relais à domicile »  -  7 tables, 10 clés étrangères
+%% ---
+%%  Comment lire ce schéma :
+%%    - Chaque bloc = une TABLE, avec ses colonnes
+%%    - PK = clé primaire (identifie chaque ligne de façon unique)
+%%    - FK = clé étrangère (contient l'identifiant d'une ligne d'une autre table)
+%%    - UK = contrainte d'unicité (pas deux fois la même valeur)
+%%    - Les traits entre tables se lisent :
+%%        ||--o{  = « un côté gauche, zéro à plusieurs côté droit »
+%%        ||--|{  = « un côté gauche, un à plusieurs côté droit »
+%%        |o--o{  = « zéro ou un côté gauche, zéro à plusieurs côté droit »
+%% ---
+%%  Le statut du colis est un ENUM (liste figée de 6 valeurs déclarées DANS
+%%  L'ORDRE DU PARCOURS) : pas de table de référence, pas de clé étrangère.
+%% ---
+%%  Pour visualiser : coller ce fichier sur https://mermaid.live
+%% =====================================================================
+erDiagram
+    ADRESSE {
+        int adr_id PK "INT UNSIGNED, auto-incrémenté"
+        varchar adr_numero "10 - peut être vide"
+        varchar adr_voie "150 - obligatoire"
+        varchar adr_complement "150 - peut être vide"
+        char adr_code_postal "5 - exactement 5 chiffres"
+        varchar adr_ville "100 - obligatoire"
+        varchar adr_pays "60 - defaut France"
+        decimal adr_latitude "9,6 - peut être vide"
+        decimal adr_longitude "9,6 - peut être vide"
+    }
+
+    PARTICULIER {
+        int par_id PK "INT UNSIGNED, auto-incrémenté"
+        int adr_id FK "vers ADRESSE - obligatoire"
+        enum par_civilite "M, MME, AUTRE"
+        varchar par_nom "80 - obligatoire"
+        varchar par_prenom "80 - obligatoire"
+        date par_date_naissance "obligatoire"
+        varchar par_email UK "150 - identifiant de connexion"
+        varchar par_telephone "20 - obligatoire"
+        char par_mot_de_passe_hash "60 - hachage bcrypt"
+        datetime par_date_inscription "defaut maintenant"
+        enum par_type_logement "MAISON, APPARTEMENT, LOCAL_PRO, ATELIER"
+        tinyint par_etage "0 = rez-de-chaussée - peut être vide"
+        boolean par_a_ascenseur "defaut faux"
+        decimal par_surface_stockage_m2 "5,2 - peut être vide"
+        smallint par_capacite_max_colis "obligatoire, superieur a 0"
+        boolean par_est_securise "defaut faux"
+        varchar par_commentaire_acces "255 - peut être vide"
+        varchar par_disponibilites "255 - texte libre"
+        boolean par_est_eligible "defaut faux"
+        boolean par_est_actif "defaut faux"
+        datetime par_date_desactivation "vide si compte actif"
+    }
+
+    TRANSPORTEUR {
+        smallint tra_id PK "auto-incrémenté"
+        int adr_id FK "vers ADRESSE - obligatoire"
+        varchar tra_raison_sociale "120 - obligatoire"
+        char tra_siret UK "14 - exactement 14 chiffres"
+        varchar tra_email "150 - obligatoire"
+        varchar tra_telephone "20 - obligatoire"
+        varchar tra_contact_nom "120 - peut être vide"
+        date tra_date_debut_partenariat "obligatoire"
+        date tra_date_fin_partenariat "vide = en cours"
+        boolean tra_est_actif "defaut vrai"
+    }
+
+    CLIENT {
+        int cli_id PK "INT UNSIGNED, auto-incrémenté"
+        int adr_id FK "vers ADRESSE - obligatoire"
+        enum cli_civilite "M, MME, AUTRE - peut être vide"
+        varchar cli_nom "80 - obligatoire"
+        varchar cli_prenom "80 - obligatoire"
+        varchar cli_email "150 - email OU telephone obligatoire"
+        varchar cli_telephone "20 - email OU telephone obligatoire"
+    }
+
+    MISSION {
+        int mis_id PK "INT UNSIGNED, auto-incrémenté"
+        int par_id FK "vers PARTICULIER - obligatoire"
+        smallint tra_id FK "vers TRANSPORTEUR - obligatoire"
+        datetime mis_date_candidature "defaut maintenant"
+        datetime mis_date_validation "vide tant que non traitée"
+        date mis_date_debut "obligatoire"
+        date mis_date_fin "vide = durée indéterminée"
+        enum mis_statut "EN_ATTENTE, ACTIVE, SUSPENDUE, TERMINEE, REFUSEE"
+        smallint mis_capacite_max_colis "quota alloué - peut être vide"
+        varchar mis_commentaire "255 - peut être vide"
+    }
+
+    COLIS {
+        bigint col_id PK "BIGINT UNSIGNED - gros volume attendu"
+        varchar col_reference UK "30 - numéro de suivi client"
+        smallint tra_id FK "vers TRANSPORTEUR - obligatoire"
+        int cli_id FK "vers CLIENT - obligatoire"
+        int mis_id FK "vers MISSION - VIDE tant que non déposé"
+        enum col_statut "statut courant - 6 valeurs, ordre du parcours"
+        decimal col_poids_kg "6,3 - obligatoire, positif"
+        smallint col_longueur_cm "peut être vide"
+        smallint col_largeur_cm "peut être vide"
+        smallint col_hauteur_cm "peut être vide"
+        decimal col_valeur_declaree_eur "8,2 - peut être vide"
+        boolean col_est_fragile "defaut faux"
+        char col_code_retrait "6 - généré au dépôt"
+        datetime col_date_prise_en_charge "obligatoire"
+        datetime col_date_depot_relais "vide tant que en tournée"
+        date col_date_limite_retrait "CALCULEE = dépôt + 14 jours"
+        datetime col_date_cloture "vide tant que non terminé"
+    }
+
+    HISTORIQUE_STATUT {
+        bigint his_id PK "BIGINT UNSIGNED - table la plus volumineuse"
+        bigint col_id FK "vers COLIS - obligatoire"
+        int mis_id FK "vers MISSION - vide avant le dépôt"
+        enum his_statut "statut atteint - memes 6 valeurs que col_statut"
+        datetime his_date_changement "defaut maintenant"
+        enum his_origine "TRANSPORTEUR, POINT_RELAIS, CLIENT, SYSTEME"
+        varchar his_commentaire "255 - peut être vide"
+    }
+
+    ADRESSE      ||--o{ PARTICULIER       : "réside à"
+    ADRESSE      ||--o{ TRANSPORTEUR      : "a son siège à"
+    ADRESSE      ||--o{ CLIENT            : "est domicilié à"
+    PARTICULIER  ||--o{ MISSION           : "assure"
+    TRANSPORTEUR ||--o{ MISSION           : "confie"
+    TRANSPORTEUR ||--o{ COLIS             : "transporte"
+    CLIENT       ||--o{ COLIS             : "est destiné à"
+    MISSION      |o--o{ COLIS             : "est déposé sous"
+    COLIS        ||--|{ HISTORIQUE_STATUT : "est tracé par"
+    MISSION      |o--o{ HISTORIQUE_STATUT : "survient sous"
