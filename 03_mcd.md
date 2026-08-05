@@ -171,7 +171,7 @@ Dès sa création, un colis est `EN_COURS_LIVRAISON` : cela constitue **déjà**
 
 L'attribut `col_statut` donne le statut courant. On pourrait le retrouver en cherchant la ligne d'historique la plus récente. C'est donc une redondance.
 
-Elle est volontaire, pour des raisons de performance : la question « quels colis sont en attente de retrait ? » est posée en permanence sur un gros volume. Le détail est au §2.4 du document 01. Un puriste supprimerait cet attribut du MCD pour ne le réintroduire qu'à l'implémentation - c'est une position parfaitement défendable, à mentionner à l'oral.
+Elle est volontaire, pour des raisons de performance : la question « quels colis sont en attente de retrait ? » est posée en permanence sur un gros volume. Le détail est au §2.4 du document 01. Un puriste supprimerait cet attribut du MCD pour ne le réintroduire qu'à l'implémentation - c'est une position parfaitement défendable techniquement.
 
 ---
 

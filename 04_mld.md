@@ -202,7 +202,7 @@ erDiagram
         int cli_id FK "vers CLIENT - obligatoire"
         int mis_id FK "vers MISSION - VIDE tant que non déposé"
         enum col_statut "statut courant - 6 valeurs, ordre du parcours"
-        decimal col_poids_kg "6,3 - obligatoire, positif"
+        decimal col_poids_kg "5,2 - obligatoire, positif"
         smallint col_longueur_cm "peut être vide"
         smallint col_largeur_cm "peut être vide"
         smallint col_hauteur_cm "peut être vide"

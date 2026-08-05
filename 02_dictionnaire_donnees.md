@@ -152,7 +152,7 @@
 | `col_id` | Identifiant du colis | Entier | BIGINT UNSIGNED | Clé primaire - **grand entier**, le cahier des charges annonce un volume important | E |
 | `col_reference` | Référence de suivi | Texte | 30 | Obligatoire, **unique** (RG14) - c'est le numéro que voit le client | E |
 | `col_statut` | Statut courant du colis | Liste figée | 6 valeurs (voir §3.6) | Obligatoire, `EN_COURS_LIVRAISON` par défaut. Redondant avec l'historique - **stocké volontairement** (RG12, §2.4) | **C stockée** |
-| `col_poids_kg` | Poids | Décimal | 6,3 | Obligatoire, positif (ex. 12,450 kg) | E |
+| `col_poids_kg` | Poids | Décimal | 5,2 | Obligatoire, positif (ex. 124,50 g) | E |
 | `col_longueur_cm` | Longueur | Entier | SMALLINT | En cm, facultatif | E |
 | `col_largeur_cm` | Largeur | Entier | SMALLINT | En cm, facultatif | E |
 | `col_hauteur_cm` | Hauteur | Entier | SMALLINT | En cm, facultatif | E |

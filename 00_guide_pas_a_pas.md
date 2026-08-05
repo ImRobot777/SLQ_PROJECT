@@ -202,13 +202,13 @@ Chaque colonne doit annoncer ce qu'elle contient. Les principaux :
 | `DATE` | une date seule | `par_date_naissance` |
 | `DATETIME` | une date **avec l'heure** | `his_date_changement` |
 | `BOOLEAN` | vrai / faux | `par_est_actif` |
-| `DECIMAL(p,s)` | un nombre à virgule **exact** | `col_poids_kg DECIMAL(6,3)` |
+| `DECIMAL(p,s)` | un nombre à virgule **exact** | `col_poids_kg DECIMAL(5,2)` |
 | `ENUM(...)` | une liste courte et figée de valeurs autorisées | `par_civilite ENUM('M','MME','AUTRE')` |
 
-**Deux pièges à connaître**, ils tombent souvent à l'oral :
+**Deux pièges à connaître** :
 
-> ⚠️ **Ne jamais utiliser `FLOAT` ou `DOUBLE` pour un montant ou un poids.** Ces types stockent des valeurs *approchées* : `0.1 + 0.2` peut donner `0.30000000000000004`. Sur une valeur déclarée en euros, c'est inacceptable. On utilise `DECIMAL`, qui est exact.
-> `DECIMAL(6,3)` se lit : 6 chiffres au total dont 3 après la virgule → de `-999.999` à `999.999`.
+> ⚠️ **Ne jamais utiliser `FLOAT` ou `DOUBLE` pour un montant.** Ces types stockent des valeurs *approchées* : `0.1 + 0.2` peut donner `0.30000000000000004`. Sur une valeur déclarée en euros, c'est inacceptable. On utilise `DECIMAL`, qui est exact.
+> `DECIMAL(5,2)` se lit : 5 chiffres au total dont 2 après la virgule → de `-999.99` à `999.99`.
 
 > ⚠️ **`VARCHAR` ou `CHAR` ?** `CHAR(5)` réserve toujours 5 caractères, même pour un texte plus court. C'est parfait quand la longueur est *toujours* la même (code postal, SIRET) et légèrement plus rapide. `VARCHAR(80)` ne consomme que ce qu'on écrit : c'est le bon choix pour un nom de famille.
 
@@ -228,8 +228,8 @@ Chaque ligne contient au minimum :
 |---|---|---|
 | **Code mnémonique** | le nom technique de la donnée | `col_poids_kg` |
 | **Désignation** | ce que c'est, en français | Poids du colis |
-| **Type** | la nature de la donnée | Décimal |
-| **Taille** | la place occupée | 6,3 |
+| **Type** | la nature de la donnée | DECIMAL |
+| **Taille** | la place occupée | 5,2 |
 
 On a ajouté deux colonnes utiles : les **contraintes** (obligatoire ? unique ? valeurs permises ?) et la **nature**.
 

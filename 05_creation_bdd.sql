@@ -241,7 +241,7 @@ CREATE TABLE colis (
                                              NOT NULL DEFAULT 'EN_COURS_LIVRAISON'
                                              COMMENT 'Statut courant du colis',
 
-    col_poids_kg             DECIMAL(6,3)      NOT NULL COMMENT 'DECIMAL et jamais FLOAT',
+    col_poids_kg             DECIMAL(5,2)      NOT NULL COMMENT 'DECIMAL et jamais FLOAT',
     col_longueur_cm          SMALLINT UNSIGNED     NULL,
     col_largeur_cm           SMALLINT UNSIGNED     NULL,
     col_hauteur_cm           SMALLINT UNSIGNED     NULL,

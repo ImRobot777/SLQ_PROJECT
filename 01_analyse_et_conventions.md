@@ -304,7 +304,7 @@ Maintenant c'est du texte : `"Lun-Ven 18h-20h30, Sam 9h-12h"`. Lisible par un hu
 
 **Pourquoi c'est acceptable ici :** aucun des 24 scénarios n'exige de rechercher par créneau horaire. Le texte suffit à afficher les horaires sur la fiche d'un point relais.
 
-**La formulation à retenir pour l'oral :**
+**La formulation à retenir si l'on veut fournir une explication technique :**
 
 > « Nous avons fusionné les disponibilités dans une colonne texte pour simplifier le modèle, parce qu'aucun cas d'utilisation ne demande de filtrer par créneau. Si ce besoin apparaît - typiquement "trouver les relais ouverts le samedi matin" -, il faudra ressortir une table `disponibilite` reliée en `0,n` au particulier. Le changement resterait isolé : aucune autre table n'est impactée. »
 

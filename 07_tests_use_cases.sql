@@ -329,17 +329,17 @@ ROLLBACK;
 /*
 -- 1) Deux colis avec la même référence de suivi        → uq_colis_reference (RG14)
 INSERT INTO colis (col_reference, tra_id, cli_id, col_statut, col_poids_kg, col_date_prise_en_charge)
-VALUES ('CE2026080400001', 1, 1, 'EN_COURS_LIVRAISON', 1.000, NOW());
+VALUES ('CE2026080400001', 1, 1, 'EN_COURS_LIVRAISON', 1.00, NOW());
 
 -- 2) Un colis au poids négatif                         → ck_colis_poids
 INSERT INTO colis (col_reference, tra_id, cli_id, col_statut, col_poids_kg, col_date_prise_en_charge)
-VALUES ('TEST000000000001', 1, 1, 'EN_COURS_LIVRAISON', -3.000, NOW());
+VALUES ('TEST000000000001', 1, 1, 'EN_COURS_LIVRAISON', -3.00, NOW());
 
 -- 3) UN STATUT QUI N'EXISTE PAS                        → type énuméré
 --    C'est LE test qui prouve qu'on n'a rien perdu en supprimant la table de
 --    référence : la base refuse toute valeur hors de la liste des 6.
 INSERT INTO colis (col_reference, tra_id, cli_id, col_statut, col_poids_kg, col_date_prise_en_charge)
-VALUES ('TEST000000000002', 1, 1, 'PERDU_EN_ROUTE', 1.000, NOW());
+VALUES ('TEST000000000002', 1, 1, 'PERDU_EN_ROUTE', 1.00, NOW());
 
 -- 4) Une faute de frappe sur un statut existant        → type énuméré
 UPDATE colis SET col_statut = 'depose_relai' WHERE col_id = 3;
@@ -347,7 +347,7 @@ UPDATE colis SET col_statut = 'depose_relai' WHERE col_id = 3;
 -- 5) Un colis déposé mais rattaché à aucune mission    → ck_colis_depot_mission (RG09)
 INSERT INTO colis (col_reference, tra_id, cli_id, col_statut, col_poids_kg,
                    col_date_prise_en_charge, col_date_depot_relais)
-VALUES ('TEST000000000003', 1, 1, 'DEPOSE_RELAIS', 1.000, NOW(), NOW());
+VALUES ('TEST000000000003', 1, 1, 'DEPOSE_RELAIS', 1.00, NOW(), NOW());
 
 -- 6) Un colis terminé sans date de clôture             → ck_colis_cloture
 UPDATE colis SET col_statut = 'RETIRE_CLIENT' WHERE col_id = 3;
