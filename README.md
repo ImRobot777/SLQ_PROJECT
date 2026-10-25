@@ -1,5 +1,12 @@
 # Peer-to-Peer Parcel Delivery Relay Platform (SQL & Database Architecture)
 
+[![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?style=flat&logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![MariaDB](https://img.shields.io/badge/MariaDB-10.6+-003545?style=flat&logo=mariadb&logoColor=white)](https://mariadb.org/)
+[![Database Architecture](https://img.shields.io/badge/Architecture-3NF%20Normalized-00758F?style=flat)](https://en.wikipedia.org/wiki/Third_normal_form)
+[![Modeling](https://img.shields.io/badge/Modeling-Merise%20(MCD%20%2F%20MLD)-F16529?style=flat)](https://github.com/ImRobot777/SLQ_PROJECT)
+[![Storage Engine](https://img.shields.io/badge/Storage%20Engine-InnoDB%20utf8mb4-0F2D59?style=flat)](https://dev.mysql.com/doc/refman/8.0/en/innodb-storage-engine.html)
+[![Integrity](https://img.shields.io/badge/Integrity-17%20CHECK%20Constraints-2EA44F?style=flat)](https://github.com/ImRobot777/SLQ_PROJECT)
+
 Comprehensive relational database design and SQL implementation for a crowd-shipping and last-mile residential parcel delivery relay network (*"Point Relais à Domicile"*).
 
 Designed using the **Merise methodology** (Conceptual & Logical Data Models) and implemented for **MySQL 8.0+ / MariaDB 10.6+** with strict 3NF normalization, automated constraint checks, business-driven triggers, and audit traceability.
